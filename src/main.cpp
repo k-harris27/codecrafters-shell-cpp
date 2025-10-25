@@ -9,6 +9,6 @@ int main() {
   // TODO: Uncomment the code below to pass the first stage
   std::cout << "$ ";
   std::string input;
-  std::cin >> input;
+  std::getline(std::cin, input);  // Read a line of input (up to \n)
   std::cout << input << ": command not found" << std::endl;
 }
