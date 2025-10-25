@@ -23,7 +23,11 @@ int main() {
       }
       return exit_code;
     }
-
-    std::cout << input << ": command not found" << std::endl;
+    else if (command == "echo") {
+      std::cout << input_stream.rdbuf() << std::endl;  // Print the remainder of the input string.
+    }
+    else {
+      std::cout << input << ": command not found" << std::endl;
+    }
   }
 }
