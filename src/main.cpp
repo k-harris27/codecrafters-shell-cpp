@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 
 int main() {
   while (true) {
@@ -10,6 +11,19 @@ int main() {
     std::cout << "$ ";
     std::string input;
     std::getline(std::cin, input);  // Read a line of input (up to \n)
+    std::istringstream input_stream(input);
+
+    std::string command;
+    std::getline(input_stream, command, ' ');  // Extract the command (up to first space)
+
+    if (command == "exit") {
+      int exit_code = 0;
+      if (std::getline(input_stream, command, ' ')) {
+        exit_code = std::stoi(command);
+      }
+      return exit_code;
+    }
+
     std::cout << input << ": command not found" << std::endl;
   }
 }
