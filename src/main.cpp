@@ -5,10 +5,6 @@
 
 const std::vector<std::string> BUILTINS {"exit", "echo", "type"};
 
-void print_command_not_found(std::string& command) {
-  std::cout << command << ": command not found" << std::endl;
-}
-
 int main() {
   while (true) {
     // Flush after every std::cout / std:cerr
@@ -40,11 +36,11 @@ int main() {
         std::cout << args << " is a shell builtin" << std::endl;
       }
       else {
-        print_command_not_found(args);
+        std::cout << args << ": not found" << std::endl;
       }
     }
     else {
-      print_command_not_found(command);
+      std::cout << command << ": command not found" << std::endl;
     }
   }
 }
