@@ -3,44 +3,34 @@
 #include <sstream>
 #include <vector>
 
-const std::vector<std::string> BUILTINS {"exit", "echo", "type"};
+#include "parser.hpp"
+#include "builtins/builtins.hpp"
 
-int main() {
-  while (true) {
+int main()
+{
+  while (true)
+  {
     // Flush after every std::cout / std:cerr
     std::cout << std::unitbuf;
     std::cerr << std::unitbuf;
 
     std::cout << "$ ";
     std::string input;
-    std::getline(std::cin, input);  // Read a line of input (up to \n)
-    std::istringstream input_stream(input);
+    std::getline(std::cin, input); // Read a line of input (up to \n)
 
-    std::string command;
-    std::getline(input_stream, command, ' ');  // Extract the command (up to first space)
+    auto tokens = tokenise(input);
 
-    if (command == "exit") {
-      int exit_code = 0;
-      if (std::getline(input_stream, command, ' ')) {
-        exit_code = std::stoi(command);
+    // If the command is in kBuiltinMap, run the associated function.
+    if (auto kvp = kBuiltinMap.find(tokens[0]); kvp != kBuiltinMap.end())
+    {
+      auto &builtin = kvp->second;
+      BuiltinResult result = builtin(tokens);
+      if (result.exit_shell)
+      {
+        return result.exit_code;
       }
-      return exit_code;
+      continue;
     }
-    else if (command == "echo") {
-      std::cout << input_stream.rdbuf() << std::endl;  // Print the remainder of the input string.
-    }
-    else if (command == "type") {
-      std::string args;
-      std::getline(input_stream, args);
-      if (std::find(BUILTINS.begin(), BUILTINS.end(), args) != BUILTINS.end()) {
-        std::cout << args << " is a shell builtin" << std::endl;
-      }
-      else {
-        std::cout << args << ": not found" << std::endl;
-      }
-    }
-    else {
-      std::cout << command << ": command not found" << std::endl;
-    }
+    std::cout << input << ": command not found" << std::endl;
   }
 }
