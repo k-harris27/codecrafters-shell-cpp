@@ -2,7 +2,8 @@
 
 #include <iostream>
 #include <sstream>
-#include <fstream>
+#include <stdexcept>
+#include <unistd.h>
 
 #ifdef _WIN32
 const char kEnvPathDelim = ';';
@@ -27,12 +28,17 @@ std::vector<std::string> GetPath()
 
 std::string FindInPath(const std::string &file)
 {
+#ifdef _WIN32
+  // TODO: access will fail for windows
+  // need: https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getbinarytypea
+  throw std::exception("Not Implemented: env.cpp::FindInPath() cannot currently run on Windows.");
+#endif
+
   auto paths = GetPath();
   for (std::string &path : paths)
   {
     std::string test = path + '/' + file;
-    std::ifstream f(test.c_str());
-    if (f.good())
+    if (!access(test.c_str(), X_OK)) // POSIX: Check if file exists and is executable
     {
       return test;
     }
