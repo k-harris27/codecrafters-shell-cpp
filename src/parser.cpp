@@ -5,8 +5,7 @@
 using std::string;
 using std::vector;
 
-// Split input string into tokens separated by whitespace.
-vector<string> tokenise(string &input)
+vector<string> Tokenise(string &input)
 {
   vector<string> tokens;
   std::stringstream ss(input);
@@ -18,4 +17,17 @@ vector<string> tokenise(string &input)
   }
 
   return tokens;
+}
+
+char const *const StrToChar(const string &s)
+{
+  return s.c_str();
+}
+
+vector<char const *> StrVectorToChars(vector<string> input)
+{
+  vector<char const *> vc;
+  std::transform(input.begin(), input.end(), std::back_inserter(vc), StrToChar);
+  vc.push_back(NULL); // Make sure to include null terminator.
+  return vc;
 }
