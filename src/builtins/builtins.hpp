@@ -9,6 +9,7 @@ struct BuiltinResult
   bool exit_shell = false;
 };
 
+BuiltinResult BuiltinCd(std::vector<std::string> &tokens);
 BuiltinResult BuiltinEcho(std::vector<std::string> &tokens);
 BuiltinResult BuiltinExit(std::vector<std::string> &tokens);
 BuiltinResult BuiltinPwd(std::vector<std::string> &tokens);
@@ -18,6 +19,7 @@ using BuiltinFunction = std::function<BuiltinResult(std::vector<std::string> &)>
 
 const std::unordered_map<std::string, BuiltinFunction> kBuiltinMap =
     {
+        {"cd", BuiltinCd},
         {"echo", BuiltinEcho},
         {"exit", BuiltinExit},
         {"pwd", BuiltinPwd},
