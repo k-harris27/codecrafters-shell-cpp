@@ -11,11 +11,42 @@ vector<string> Tokenise(string &input)
   std::stringstream ss(input);
   string word;
 
-  while (std::getline(ss, word, ' '))
+  bool in_single_quotes = false;
+  for (char &c : input)
   {
-    tokens.push_back(word);
-  }
+    // Single quote behaviour
+    if (in_single_quotes)
+    {
+      if (c == '\'')
+      {
+        in_single_quotes = false;
+        continue;
+      }
+      word += c;
+      continue;
+    }
 
+    // Default mode behaviour
+
+    if (c == '\'')
+    {
+      in_single_quotes = true;
+      continue;
+    }
+    if (c == ' ')
+    {
+      // Word ended - submit as newest token.
+      if (word.length() > 0)
+      {
+        tokens.push_back(word);
+        word = "";
+      }
+      // Make sure we also skip consecutive white spaces.
+      continue;
+    }
+    word += c;
+  }
+  tokens.push_back(word);
   return tokens;
 }
 
