@@ -24,6 +24,9 @@ int main()
 
     auto tokens = Tokenise(input);
 
+    if (tokens.size() == 0)
+      continue;
+
     // If the command is in kBuiltinMap, run the associated function.
     if (auto kvp = kBuiltinMap.find(tokens[0]); kvp != kBuiltinMap.end())
     {
