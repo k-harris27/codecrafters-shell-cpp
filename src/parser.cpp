@@ -5,6 +5,11 @@
 using std::string;
 using std::vector;
 
+const char CHAR_SPACE = ' ';
+const char CHAR_BACKSLASH = '\\';
+const char CHAR_SINGLE_QUOTE = '\'';
+const char CHAR_DOUBLE_QUOTE = '"';
+
 vector<string> Tokenise(string &input)
 {
   vector<string> tokens;
@@ -19,12 +24,14 @@ vector<string> Tokenise(string &input)
   };
   ParseMode mode = ParseMode::standard;
 
-  for (char &c : input)
+  for (int i = 0; i < input.length(); i++)
   {
+    char &c = input[i];
+
     // Single quote behaviour
     if (mode == ParseMode::single_quotes)
     {
-      if (c == '\'')
+      if (c == CHAR_SINGLE_QUOTE)
       {
         mode = ParseMode::standard;
         continue;
@@ -36,7 +43,7 @@ vector<string> Tokenise(string &input)
     // Double quote behaviour
     if (mode == ParseMode::double_quotes)
     {
-      if (c == '"')
+      if (c == CHAR_DOUBLE_QUOTE)
       {
         mode = ParseMode::standard;
         continue;
@@ -47,17 +54,17 @@ vector<string> Tokenise(string &input)
 
     // Default mode behaviour
 
-    if (c == '\'')
+    if (c == CHAR_SINGLE_QUOTE)
     {
       mode = ParseMode::single_quotes;
       continue;
     }
-    if (c == '"')
+    if (c == CHAR_DOUBLE_QUOTE)
     {
       mode = ParseMode::double_quotes;
       continue;
     }
-    if (c == ' ')
+    if (c == CHAR_SPACE)
     {
       // Word ended - submit as newest token.
       if (word.length() > 0)
@@ -66,6 +73,12 @@ vector<string> Tokenise(string &input)
         word = "";
       }
       // Make sure we also skip consecutive white spaces.
+      continue;
+    }
+    if (c == CHAR_BACKSLASH)
+    {
+      i += 1;
+      word += input[i];
       continue;
     }
     word += c;
