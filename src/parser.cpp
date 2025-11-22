@@ -11,15 +11,34 @@ vector<string> Tokenise(string &input)
   std::stringstream ss(input);
   string word;
 
-  bool in_single_quotes = false;
+  enum ParseMode
+  {
+    standard,
+    single_quotes,
+    double_quotes,
+  };
+  ParseMode mode = ParseMode::standard;
+
   for (char &c : input)
   {
     // Single quote behaviour
-    if (in_single_quotes)
+    if (mode == ParseMode::single_quotes)
     {
       if (c == '\'')
       {
-        in_single_quotes = false;
+        mode = ParseMode::standard;
+        continue;
+      }
+      word += c;
+      continue;
+    }
+
+    // Double quote behaviour
+    if (mode == ParseMode::double_quotes)
+    {
+      if (c == '"')
+      {
+        mode = ParseMode::standard;
         continue;
       }
       word += c;
@@ -30,7 +49,12 @@ vector<string> Tokenise(string &input)
 
     if (c == '\'')
     {
-      in_single_quotes = true;
+      mode = ParseMode::single_quotes;
+      continue;
+    }
+    if (c == '"')
+    {
+      mode = ParseMode::double_quotes;
       continue;
     }
     if (c == ' ')
