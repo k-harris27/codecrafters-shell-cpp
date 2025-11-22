@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+#include <iostream>
+
 using std::string;
 using std::vector;
 
@@ -83,7 +85,10 @@ vector<string> Tokenise(string &input)
     }
     word += c;
   }
-  tokens.push_back(word);
+  if (word.length() > 0)
+  {
+    tokens.push_back(word);
+  }
   return tokens;
 }
 
@@ -92,7 +97,7 @@ char const *const StrToChar(const string &s)
   return s.c_str();
 }
 
-vector<char const *> StrVectorToChars(vector<string> input)
+vector<char const *> StrVectorToChars(const vector<string> &input)
 {
   vector<char const *> vc;
   std::transform(input.begin(), input.end(), std::back_inserter(vc), StrToChar);
